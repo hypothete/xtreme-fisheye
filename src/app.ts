@@ -7,8 +7,8 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import fisheyeShader from './fisheye';
 
 const canvas = document.querySelector('canvas');
+const fovInput: HTMLInputElement | null = document.querySelector('#fov');
 const keys: Record<string, boolean> = {};
-const FOV = 180;
 
 start();
 
@@ -49,9 +49,15 @@ async function start() {
 
   const cubeGeo = new BoxBufferGeometry();
   const cubeMat = new MeshLambertMaterial({ color: new Color(0xff0000)});
-  for (let i=0; i<10; i++) {
+  for (let i=0; i<30; i++) {
     const cubeMesh = new Mesh(cubeGeo, cubeMat);
-    cubeMesh.position.set(2 * (i - 5) + 0.5, 0, 0);
+    const scale = Math.random() * 3 + 0.5;
+    cubeMesh.scale.set(scale, scale, scale);
+    cubeMesh.position.set(
+      Math.random() * 20 - 10,
+      Math.random() * 20 - 10,
+      Math.random() * 20 - 10,
+    );
     scene.add(cubeMesh);
   }
 
@@ -62,7 +68,7 @@ async function start() {
   if (useCube) {
     composer = new EffectComposer(renderer);
     fisheyePass = new ShaderPass(fisheyeShader);
-    fisheyePass.uniforms.fov.value = FOV;
+    fisheyePass.uniforms.fov.value = Number(fovInput?.value || 90);
     fisheyePass.uniforms.aspect.value = window.innerWidth / window.innerHeight;
     fisheyePass.uniforms.cubemap.value = cubeRenderTarget.texture;
     composer.addPass(fisheyePass);
@@ -71,6 +77,7 @@ async function start() {
   window.addEventListener( 'resize', onWindowResize );
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
+  fovInput?.addEventListener('input', onFOVInput)
   console.log('Starting scene...')
   animate();
 
@@ -102,6 +109,11 @@ async function start() {
 
   function onKeyUp(evt: KeyboardEvent) {
     keys[evt.key] = false;
+  }
+
+  function onFOVInput () {
+    if (!fisheyePass) return;
+    fisheyePass.uniforms.fov.value = Number(fovInput?.value || 90);
   }
 
   function movePlayer() {

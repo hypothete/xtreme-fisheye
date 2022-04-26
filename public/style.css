@@ -7,3 +7,11 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+#fov {
+  position: absolute;
+  z-index: 2;
+  width: 270px;
+  right: 2rem;
+  bottom: 2rem;
+}

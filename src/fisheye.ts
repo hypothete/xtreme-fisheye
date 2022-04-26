@@ -24,15 +24,16 @@ export default {
 
   void main() {
     vec2 ndc = 2.0 * (vUV - 0.5); // -1 to 1
-    float fovy = PI * (fov / 180.0) / 2.0;
+    float fovy = PI * (fov / 180.0) / 4.0;
     float fovx = fovy * aspect;
+    ndc *= vec2(fovx, fovy);
 
-    // ported from https://github.com/shaunlebron/blinky/blob/master/engine/NQ/fisheye.c
-    float clat = cos(ndc.y * fovy);
+    // ported from blinky's latlon_to_ray method
+    float clat = cos(ndc.y);
     vec3 rd = normalize(vec3(
-      sin(ndc.x * fovx) * clat,
-      sin(ndc.y * fovy),
-      cos(ndc.x * fovx) * clat
+      sin(ndc.x) * clat,
+      sin(ndc.y),
+      cos(ndc.x) * clat
     ));
 
     gl_FragColor = vec4(rd, 1.0);

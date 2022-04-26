@@ -1,4 +1,4 @@
-import { WebGL1Renderer, Scene, PerspectiveCamera, BoxBufferGeometry, MeshLambertMaterial, Color, HemisphereLight, Mesh, WebGLCubeRenderTarget, CubeCamera, LinearMipmapLinearFilter, Object3D, Vector3, BackSide, PointLight } from 'three';
+import { WebGL1Renderer, Scene, BoxBufferGeometry, MeshLambertMaterial, Color, Mesh, WebGLCubeRenderTarget, CubeCamera, LinearMipmapLinearFilter, Object3D, Vector3, BackSide, PointLight } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 
@@ -30,12 +30,6 @@ async function start() {
   const cubeCamera = new CubeCamera( 0.01, 100, cubeRenderTarget );
   player.add(cubeCamera);
 
-  const camera = new PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 100);
-  camera.rotateY(Math.PI);
-  player.add(camera);
-
-  const useCube = true;
-
   const sceneLight = new PointLight(0xffffff, 1.0);
   sceneLight.position.set(0, 3, 0);
   player.add(sceneLight);
@@ -60,17 +54,12 @@ async function start() {
   }
 
   const renderer = new WebGL1Renderer({ canvas });
-  let composer: EffectComposer | undefined;
-  let fisheyePass: ShaderPass | undefined;
-
-  if (useCube) {
-    composer = new EffectComposer(renderer);
-    fisheyePass = new ShaderPass(fisheyeShader);
-    fisheyePass.uniforms.fov.value = Number(fovInput?.value || 90);
-    fisheyePass.uniforms.aspect.value = window.innerWidth / window.innerHeight;
-    fisheyePass.uniforms.cubemap.value = cubeRenderTarget.texture;
-    composer.addPass(fisheyePass);
-  }
+  const composer = new EffectComposer(renderer);
+  const fisheyePass = new ShaderPass(fisheyeShader);
+  fisheyePass.uniforms.fov.value = Number(fovInput?.value || 90);
+  fisheyePass.uniforms.aspect.value = window.innerWidth / window.innerHeight;
+  fisheyePass.uniforms.cubemap.value = cubeRenderTarget.texture;
+  composer.addPass(fisheyePass);
   
   window.addEventListener( 'resize', onWindowResize );
   document.addEventListener('keydown', onKeyDown);
@@ -83,22 +72,13 @@ async function start() {
     requestAnimationFrame(animate);
     movePlayer();
     cubeCamera.update(renderer, scene);
-    if (composer) {
-      composer.render();
-    } else {
-      renderer.render(scene, camera);
-    }
+    composer.render();
   }
 
   function onWindowResize() {
     renderer.setSize( window.innerWidth, window.innerHeight );
-    if (composer && fisheyePass) {
-      fisheyePass.uniforms.aspect.value = window.innerWidth / window.innerHeight;
-      composer.setSize( window.innerWidth, window.innerHeight );
-    } else {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    }
+    fisheyePass.uniforms.aspect.value = window.innerWidth / window.innerHeight;
+    composer.setSize( window.innerWidth, window.innerHeight );
   }
 
   function onKeyDown(evt: KeyboardEvent) {
@@ -110,17 +90,16 @@ async function start() {
   }
 
   function onFOVInput () {
-    if (!fisheyePass) return;
     fisheyePass.uniforms.fov.value = Number(fovInput?.value || 90);
   }
 
   function movePlayer() {
     const playerDir = player.getWorldDirection(new Vector3());
     if (keys['a']) {
-      player.rotateY(-0.1);
+      player.rotateY(-0.05);
     }
     if (keys['d']) {
-      player.rotateY(0.1);
+      player.rotateY(0.05);
     }
     if (keys['w']) {
       player.position.add(playerDir.multiplyScalar(0.05));

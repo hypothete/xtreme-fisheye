@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "three": "./three.js",
+    "three/examples/jsm/postprocessing/EffectComposer.js": "./three/examples/jsm/postprocessing/EffectComposer.js",
+    "three/examples/jsm/postprocessing/ShaderPass.js": "./three/examples/jsm/postprocessing/ShaderPass.js"
+  }
+}

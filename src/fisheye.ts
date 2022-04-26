@@ -24,9 +24,11 @@ export default {
 
   void main() {
     vec2 ndc = 2.0 * (vUV - 0.5); // -1 to 1
-    float fovy = PI * (fov / 180.0) / 4.0;
-    float fovx = fovy * aspect;
+    float fovx = PI * (fov / 360.0);
+    float fovy = fovx / aspect;
+
     ndc *= vec2(fovx, fovy);
+    ndc.y = clamp(ndc.y, -PI / 2.0, PI / 2.0);
 
     // ported from blinky's latlon_to_ray method
     float clat = cos(ndc.y);

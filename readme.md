@@ -1,7 +1,10 @@
 # XTREME Fisheye
 Implementation of a true fisheye projection in ThreeJS
 
-![A screenshot of a path traced scene](./screenshot.png)
+## [Try it here!](https://hypothete.com/projects/2022/xtreme-fisheye/)
+
+
+![A blue cube filled with smaller red cubes as viewed through the fisheye lens](./screenshot.png)
 
 I recently saw a short video of the cancelled Sega Saturn game [Sonic Xtreme](https://en.wikipedia.org/wiki/Sonic_X-treme) and wanted to try movement in a 3D environment using a fisheye camera. Most fisheye cameras that you can find on the web apply the transformation in postprocessing to a flat texture. This introduces heavy distortion at the edges of the image, and sight lines into the scene do not curve properly. In contrast, this project places a CubeCamera on the player, and uses the EffectComposer to sample from the cubemap in order to render the scene.
 

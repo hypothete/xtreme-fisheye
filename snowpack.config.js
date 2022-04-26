@@ -7,4 +7,7 @@ module.exports = {
     src: {url: '/'},
     public: {url: '/', static: true, resolve: false},
   },
+  buildOptions: {
+    out: 'docs'
+  }
 };

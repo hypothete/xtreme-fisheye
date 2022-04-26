@@ -6,8 +6,5 @@ module.exports = {
   mount: {
     src: {url: '/'},
     public: {url: '/', static: true, resolve: false},
-  },
-  buildOptions: {
-    out: 'docs'
   }
 };

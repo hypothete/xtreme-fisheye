@@ -22,7 +22,7 @@ async function start() {
 
   const scene = new Scene();
   const player = new Object3D();
-  player.position.set(0, 0, -3);
+  player.position.set(0, 0, -2);
   scene.add(player);
 
   const cubeRenderTarget = new WebGLCubeRenderTarget(
@@ -105,16 +105,23 @@ async function start() {
   }
 
   function movePlayer() {
+    const playerDir = player.getWorldDirection(new Vector3());
     if (keys['a']) {
-      player.position.add(new Vector3(-0.1, 0, 0));
+      player.rotateY(-0.1);
     }
     if (keys['d']) {
-      player.position.add(new Vector3(0.1, 0, 0));
+      player.rotateY(0.1);
     }
     if (keys['w']) {
-      player.position.add(new Vector3(0, 0.1, 0));
+      player.position.add(playerDir.multiplyScalar(0.05));
     }
     if (keys['s']) {
+      player.position.add(playerDir.multiplyScalar(-0.05));
+    }
+    if (keys['q']) {
+      player.position.add(new Vector3(0, 0.1, 0));
+    }
+    if (keys['z']) {
       player.position.add(new Vector3(0, -0.1, 0));
     }
   }

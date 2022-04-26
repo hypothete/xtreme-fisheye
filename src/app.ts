@@ -1,8 +1,6 @@
 import { WebGL1Renderer, Scene, PerspectiveCamera, BoxBufferGeometry, MeshLambertMaterial, Color, HemisphereLight, Mesh, WebGLCubeRenderTarget, CubeCamera, LinearMipmapLinearFilter, Object3D, Vector3, BackSide, PointLight } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-// https://github.com/FredKSchott/snowpack/issues/3867#issuecomment-1064298483
-
 
 import fisheyeShader from './fisheye';
 

@@ -36,7 +36,6 @@ export default {
       cos(ndc.x) * clat
     ));
 
-    gl_FragColor = vec4(rd, 1.0);
     gl_FragColor = vec4(textureCube(cubemap, rd).rgb, 1.0);
   }
   `,
